@@ -1,0 +1,104 @@
+body {
+    background-color: #727374;
+    font-family: 'Texturina', serif;
+}
+
+.navbar {
+    background-color: #575A5E;
+    border-radius: 5px;
+    height: 70px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.icon {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
+    align-items: center; 
+}
+
+.logo {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 60px;
+}
+
+.logo img {
+    width: 80px;
+    height: 80px;
+    display: block;
+}
+
+.search {
+    display: flex;
+    justify-content: center;
+    height: 35px;
+    margin-left: 20px; 
+    border-radius: 5px;
+    flex: 1; 
+}
+
+.search input {
+    width: 134px;
+    height: 15px;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.right-icons {
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+}
+
+.right-icons li {
+    margin-left: 20px;
+}
+
+.banner img{
+    width: 815px;
+    height: 350px;
+    border-radius: 5px;
+}
+
+.banner {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    /* background-color: white; */
+    /* height: 350px; */
+    /* width: 990px; */
+    border-radius: 5px;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+    width: 100%; 
+}
+
+.livro {
+    background-color: #575A5E;
+    width: 211px;
+    height: 342px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+}
+
+.livro img {
+    height: 200px;
+    margin-top: 10px;
+}
+
+.star {
+    display: flex;    
+    justify-content: center;
+}
