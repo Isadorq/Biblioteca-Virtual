@@ -11,12 +11,10 @@ app.use(cors());
 app.use(express.json());
 
 // Conexão ao MongoDB
-mongoose.connect('mongodb+srv://isa:dora@biblioteca.jve9d.mongodb.net/?retryWrites=true&w=majority&appName=Biblioteca', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
+mongoose.connect('mongodb+srv://isa:dora@biblioteca.jve9d.mongodb.net/?retryWrites=true&w=majority&appName=Biblioteca')
     .then(() => console.log('MongoDB conectado'))
-    .catch(err => console.error('Erro ao conectar ao MongoDB', err));
+    .catch(err => console.error('Erro ao conectar ao MongoDB', err)
+);
 
 // Importação das rotas
 const bookRoutes = require('./routes/books');
