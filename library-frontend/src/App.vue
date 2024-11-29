@@ -5,12 +5,18 @@
   <!-- Lista de livros -->
   <BookForm @edit-book="setBookToEdit" ref="bookList" />
   <BookList/>
+
+    <RouterLink to="/home"></RouterLink>
+
   </div>
 </template>
+
+
 
 <script>
   import BookList from './components/BookList.vue';
   import BookForm from './components/BookForm.vue';
+import { RouterLink } from 'vue-router';
 
   export default {
    data(){
