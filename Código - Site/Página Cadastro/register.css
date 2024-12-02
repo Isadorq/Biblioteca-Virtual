@@ -1,21 +1,49 @@
 body {
     background-color: #727374;
     font-family: 'Texturina', serif;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.main-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%; /* Ajuste a largura conforme necessário */
+    max-width: 1200px; /* Limite de largura máxima */
 }
 
 .containerReg {
     background-color: white;
     border-radius: 5px;
     width: 600px;
-    height: 600px;
-    display: flex;
-    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 .put input {
-    justify-content: space-between;
-    display: flex;
+    width: 100%;
     padding: 10px;
-    margin: 50px 0px 0px 0px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: flex;
     
+}
+
+.logo {
+    text-align: center;
+}
+
+img {
+    width: 404px;
+    height: auto;
 }

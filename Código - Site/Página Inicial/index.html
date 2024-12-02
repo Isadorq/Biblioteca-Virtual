@@ -9,52 +9,62 @@
 </head>
 <body>
     <nav>
-
         <div class="navbar">
-            <!-- Ícone do menu hamburguer à esquerda -->
-            <ul class="icon">
-                <li>
-                    <a href="#sidebar">
-                        <i class="fa-solid fa-bars" style="color: #ffffff;"></i>
-                    </a>
-                </li>
-            </ul>
-        
-            <!-- Logo à direita do ícone do menu hamburguer -->
-            <div class="logo">
-                <img src="../../Imagens/logoTransparent.png" alt="Logo">
-            </div>
-        
-            <!-- Barra de pesquisa -->
-            <div class="search">
-                <input type="text" placeholder="Search ur book ☠️">
-            </div>
-        
-            <!-- Ícones de User e Notifications à direita -->
-            <ul class="right-icons">
-                <li>
-                    <a href="#user">
-                        <i class="fa-solid fa-skull" style="color: #ffffff;"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="#notifications">
-                        <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
-                    </a>
-                </li>
-            </ul>
-        
-            <!-- Sidebar -->
-            <div class="sidebar">
-                <!-- conteúdo da sidebar aqui -->
-            </div> 
+    <ul class="icon">
+        <li>
+            <a href="#" id="menu-toggle">
+                <i class="fa-solid fa-bars" style="color: #ffffff;"></i>
+            </a>
+        </li>
+    </ul>
+    <div class="logo">
+        <img src="../../Imagens/logoTransparent.png" alt="Logo">
+    </div>
+    <div class="search">
+        <input type="text" placeholder="Search ur book ☠️">
+    </div>
+    <ul class="right-icons">
+        <li>
+            <a href="#" id="skull-toggle">
+                <i class="fa-solid fa-skull" style="color: #ffffff;"></i>
+            </a>
+        </li>
+        <li>
+            <a href="#notifications">
+                <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!-- Tela que aparecerá ao clicar no ícone skull -->
+        <div class="popup" id="popup">
+           <p>Usuário</p>
+            <p>Queen never CRY</p>
+            <p>Who's this DIVA</p>
         </div>
-        
 
-       
-
+        <div class="sidebar">
+            <ul>
+                <li class="iconE">
+                    <i class="fa-solid fa-skull"></i>
+                    <p class="letter">Usuário</p>
+                </li>
+                <li class="iconE">
+                    <i class="fa-solid fa-bell"></i>
+                    <p class="letter">Notificações</p>
+                </li>
+                <li class="iconE">
+                    <i class="fa-solid fa-folder"></i>
+                    <p class="letter">Relatório</p>
+                </li>
+                <li class="iconE">
+                    <i class="fa-solid fa-list" style="color: #ffffff;"></i>
+                    <p>Filtros</p>
+                </li>
+            </ul>
+        </div>
     </nav>
-
     <main>
 
         <div class="banner">
