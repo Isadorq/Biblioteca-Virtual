@@ -125,7 +125,78 @@ body {
     border-radius: 4px; /* Bordas arredondadas */
 }
 
-.descrition input[type="file"] {
-    margin-top: 20px; /* Espaço entre os campos e o upload */
-    align-self: flex-start; /* Alinha o botão de upload à esquerda */
+.descrition input {
+    margin-top: 20px; 
+    align-self: flex-start; 
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #575A5E;
+    color: white;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 1000;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.iconE {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 18px;
+    width: 45px;
+    height: 45px;
+}
+
+.iconE i {
+    font-size: 24px;
+    color: white;
+}
+
+.iconE .letter {
+    color: white;
+}
+
+/* Animação do menu */
+.navbar.shift {
+    margin-left: 250px;
+}
+
+.popup {
+    display: none; /* Inicialmente oculta */
+    position: relative;
+    top: 100%; /* Fica imediatamente abaixo do ícone */
+    left: 86%;
+    transform: translateX(-50%);
+    background-color: #575A5E;
+    color: white;
+    padding: 20px;
+    width: 250px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
 }

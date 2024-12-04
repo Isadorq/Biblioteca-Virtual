@@ -77,18 +77,9 @@ body {
 .mainContainer {
     display: flex;
     justify-content: center;
-    align-items: flex-start; 
-    gap: 90px;
+    align-items: flex-start;
     margin-top: 30px;
-}
-
-.container {
-    background-color: white;
-    display: flex;
-    border-radius: 5px;
-    width: 300px;
-    height: 450px;
-    margin: 0; 
+    gap: 90px; 
 }
 
 .containerWrapper {
@@ -99,32 +90,118 @@ body {
 .descrition {
     background-color: white;
     border-radius: 5px;
-    width: 510px;
-    height: 445px;
+    width: 680px;
+    height: auto;
     display: flex;
-    align-items: center;
-    padding: 10px;
+    flex-direction: column; 
+    padding: 20px;
 }
 
 .inpust {
-    text-align: center; /* Centraliza os elementos horizontalmente */
-    margin-top: 20px; /* Espaço acima do formulário */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+    margin-top: 20px;
 }
 
 .campo {
-    display: inline-block; /* Alinha os pares lado a lado */
-    margin: 10px 15px; /* Ajusta o espaçamento ao redor dos pares */
-    text-align: left; /* Alinha o texto à esquerda dentro do bloco */
+    display: flex; 
+    align-items: center;
+    gap: 10px;
 }
 
 .campo p {
-    display: block; /* Garante que o texto fique separado do input */
-    margin: 0; /* Remove margens adicionais */
+    margin: 0;
+    flex-shrink: 0; 
+    width: 120px;
+    text-align: left; 
 }
 
 .campo input {
-    width: 200px; /* Define um tamanho fixo para os inputs */
-    padding: 5px; /* Adiciona espaço interno */
-    border: 1px solid #ccc; /* Estiliza a borda */
-    border-radius: 4px; /* Bordas arredondadas */
+    flex: 1; 
+    max-width: 300px;
+    padding: 5px; 
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.descrition input {
+    margin-top: 20px; 
+    align-self: flex-start; 
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #575A5E;
+    color: white;
+    overflow-y: auto;
+    transition: left 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    z-index: 1000;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.iconE {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-size: 18px;
+    width: 45px;
+    height: 45px;
+}
+
+.iconE i {
+    font-size: 24px;
+    color: white;
+}
+
+.iconE .letter {
+    color: white;
+}
+
+/* Animação do menu */
+.navbar.shift {
+    margin-left: 250px;
+}
+
+.popup {
+    display: none; /* Inicialmente oculta */
+    position: relative;
+    top: 100%; /* Fica imediatamente abaixo do ícone */
+    left: 86%;
+    transform: translateX(-50%);
+    background-color: #575A5E;
+    color: white;
+    padding: 20px;
+    width: 250px;
+    border-radius: 5px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.bat img {
+    width: 18px;
+    height: 18px;
 }
