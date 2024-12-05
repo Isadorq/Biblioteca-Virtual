@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import App from './App.vue'; // Componente principal
+import App from '../App.vue'; // Componente principal
 import Home from '../pages/Home.vue';
 import About from '../pages/About.vue';
 import Contact from '../pages/Contact.vue';

@@ -8,6 +8,23 @@ const apiClient = axios.create({
     },
 });
 
+// Função para obter o token JWT do localStorage
+const getToken = () => localStorage.getItem('token');
+
+// Adiciona o token JWT nas requisições
+apiClient.interceptors.request.use(
+    config => {
+        const token = getToken();  // Obtém o token do localStorage
+        if (token) {
+            config.headers['Authorization'] = `Bearer ${token}`;  // Adiciona o token ao cabeçalho
+        }
+        return config;
+    },
+    error => {
+        return Promise.reject(error);
+    }
+);
+
 // Exporta funções CRUD usando Axios
 export default {
     getBooks() {
