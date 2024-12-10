@@ -1,30 +1,53 @@
-import { createApp } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
-import App from '../App.vue'; // Componente principal
-import Home from '../pages/Home.vue';
-import About from '../pages/About.vue';
-import Contact from '../pages/Contact.vue';
+import PagLogin from '@/views/PagLogin.vue';
+import AddUser from '@/views/AddUser.vue';
+import DescLivro from '@/views/DescLivro.vue';
+import PagCadastro from '@/views/PagCadastro.vue';
+import PagInicial from '@/views/PagInicial.vue';
+import PagInicio from '@/views/PagInicio.vue';
+import AddLivro from '@/views/AddLivro.vue';
 
-// Definindo as rotas
 const routes = [
-    { path: '/home', name: 'Home', component: Home }, // Página inicial
-    { path: '/about', name: 'About', component: About }, // Página sobre
-    { path: '/contact', name: 'Contact', component: Contact } // Página de contato
+  {
+    path: '/',  
+    name: 'inicio',
+    component: PagInicio, 
+  },
+  {
+    path: '/PagLogin',
+    name: 'login',
+    component: PagLogin,
+  },
+  {
+    path: '/PagCadastro',
+    name: 'cadastro',
+    component: PagCadastro,
+  },
+  {
+    path: '/PagInicial',
+    name: 'inicial',
+    component: PagInicial,
+  },
+  {
+    path: '/AddLivro',
+    name: 'addlivro',
+    component: AddLivro,
+  },
+  {
+    path: '/AddUser',
+    name: 'adduser',
+    component: AddUser,
+  },
+  {
+    path: '/DescLivro',
+    name: 'desclivro',
+    component: DescLivro,
+  },
 ];
 
-// Criando o roteador
 const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL), // Histórico da aplicação
-    routes, // Rotas definidas acima
+  history: createWebHistory(),
+  routes,
 });
-
-// Criando a aplicação Vue
-const app = createApp(App);
-
-// Adicionando o roteador à aplicação
-app.use(router);
-
-// Montando o app na DOM
-app.mount('#app');
 
 export default router;

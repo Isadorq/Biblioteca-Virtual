@@ -1,11 +1,11 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
+import '@fortawesome/fontawesome-free/css/all.css';
 
-const app = createApp(App);  // Definir a variável app aqui
-app.use(router);  // Usar o router
-app.mount('#app');  // Montar o app
 
-createApp(App)
-.use(router)
-.mount('#app');
+const app = createApp(App); 
+
+app.config.productionTip = false;
+app.use(router);  
+app.mount('#app');  

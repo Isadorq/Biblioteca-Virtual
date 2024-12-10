@@ -2,6 +2,8 @@ require('dotenv').config();     // Carrega variáveis de ambiente do arquivo .en
 
 const express = require('express');     // Importa o express, um framework para criar APIs
 const mongoose = require('mongoose');   // Importa o mongoose para conectar e interagir com o MongoDB
+const cors = require('cors');
+app.use(cors());
 
 const app = express();  // Inicializa uma aplicação express
 const authRotes = require('./routes/authRoutes')    // Importa as rotas de autenticação (ainda a serem criadas)
