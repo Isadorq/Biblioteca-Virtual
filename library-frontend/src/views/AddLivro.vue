@@ -1,31 +1,5 @@
 <template>
-  <nav>
-    <div class="navbar">
-      <ul class="icon">
-        <!-- Menu e ícones -->
-      </ul>
-      <div class="logo">
-        <RouterLink to="PagInicial">
-          <img src="/logoTransparent.png" alt="Logo">
-        </RouterLink>
-      </div>
-      <div class="search">
-        <input type="text" placeholder="Search ur book ☠️">
-      </div>
-      <ul class="right-icons">
-        <li>
-          <router-link to="PagUser">
-            <i class="fa-solid fa-skull" style="color: #ffffff;"></i>
-          </router-link>
-        </li>
-        <li>
-          <a href="#notifications">
-            <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
-          </a>
-        </li>
-      </ul>
-    </div>
-  </nav>
+  <NavBar></NavBar>
 
   <div class="form-container">
     <h2>Adicionar Livro</h2>
@@ -51,7 +25,13 @@
 </template>
 
 <script>
+import axios from 'axios';
+import NavBar from '@/components/NavBar.vue';
+
 export default {
+  components: {
+    NavBar,
+  },
   data() {
     return {
       book: {
@@ -59,8 +39,9 @@ export default {
         author: '',
         year: null,
         description: '',
-        image: null
-      }
+        image: null,
+        status: 'available',  // Adicionando status com valor inicial 'available'
+      },
     };
   },
   methods: {
@@ -79,6 +60,7 @@ export default {
       formData.append('author', this.book.author);
       formData.append('year', this.book.year);
       formData.append('description', this.book.description);
+      formData.append('status', this.book.status);  // Adicionando o status ao FormData
 
       // Verifica se a imagem foi selecionada
       if (this.book.image) {
@@ -94,20 +76,21 @@ export default {
         author: this.book.author,
         year: this.book.year,
         description: this.book.description,
-        image: this.book.image ? this.book.image.name : 'Nenhuma imagem'
+        image: this.book.image ? this.book.image.name : 'Nenhuma imagem',
+        status: this.book.status,
       });
 
       try {
         const response = await axios.post('http://localhost:3000/api/books', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+            'Content-Type': 'multipart/form-data',
+          },
         });
 
         console.log('Livro adicionado:', response.data);
 
         // Limpa o formulário após o envio
-        this.book = { title: '', author: '', year: null, description: '', image: null };
+        this.book = { title: '', author: '', year: null, description: '', image: null, status: 'available' };
 
         this.$emit('book-added', response.data);
 
@@ -117,10 +100,12 @@ export default {
           console.error('Mensagem de erro do servidor:', error.response.data.message);
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
+
+
 
 <style scoped>
 body {

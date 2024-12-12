@@ -8,10 +8,15 @@ import ListaLivro from '@/views/ListaLivro.vue';
 import PagUser from '@/views/PagUser.vue';
 import AddLivro from '@/views/AddLivro.vue';
 import MaisLivros from '@/views/MaisLivros.vue';
+import ListaLogin from '@/views/ListaLogin.vue';
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    {
+      path: '/',
+      redirect: '/PagCadastro',  // Redireciona para a página de cadastro ao acessar a raiz
+    },
     {
       path: '/AddLivro',
       name: 'addlivro',
@@ -57,6 +62,11 @@ const router = createRouter({
       path: '/PagUser',
       name: 'paguser',
       component: PagUser,
+    },
+    {
+      path: '/ListaLogin',
+      name: 'listalogin',
+      component: ListaLogin,
     },
   ]
 });

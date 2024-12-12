@@ -49,3 +49,44 @@ exports.login = async (req, res) => {
   }
 };
 
+// controllers/usuariosController.js
+const User = require('../models/user');
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    // Buscar todos os usuários do banco
+    const users = await User.find();
+    res.status(200).json(users);
+  } catch (error) {
+    console.error("Erro ao buscar usuários:", error);
+    res.status(500).json({ message: 'Erro ao buscar usuários' });
+  }
+};
+
+exports.deleteUser = async (req, res) => {
+  const { userId } = req.params;
+
+  try {
+    const user = await User.findByIdAndDelete(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'Usuário não encontrado' });
+    }
+    res.status(200).json({ message: 'Usuário excluído com sucesso' });
+  } catch (error) {
+    console.error("Erro ao excluir usuário:", error);
+    res.status(500).json({ message: 'Erro ao excluir usuário' });
+  }
+};
+
+// routes/usuarios.js
+const express = require('express');
+const router = express.Router();
+const usuariosController = require('../controllers/usuariosController');
+
+// Rota para obter todos os usuários cadastrados
+router.get('/usuarios', usuariosController.getAllUsers);
+
+// Rota para excluir um usuário específico
+router.delete('/usuarios/:userId', usuariosController.deleteUser);
+
+module.exports = router;

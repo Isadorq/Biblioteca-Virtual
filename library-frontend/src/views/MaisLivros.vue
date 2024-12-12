@@ -1,33 +1,7 @@
 <template>
-  <nav>
-      <div class="navbar">
-        <ul class="icon">
-          <!-- <li>
-            <a href="#" id="menu-toggle" @click="toggleSidebar">
-              <i class="fa-solid fa-bars" style="color: #ffffff;"></i>
-            </a>
-          </li> -->
-        </ul>
-        <div class="logo">
-          <img src="/logoTransparent.png" alt="Logo">
-        </div>
-        <div class="search">
-          <input type="text" placeholder="Search ur book ☠️">
-        </div>
-        <ul class="right-icons">
-          <li>
-            <router-link to="PagUser">
-              <i class="fa-solid fa-skull" style="color: #ffffff;"></i>
-            </router-link>
-          </li>
-          <li>
-            <a href="#notifications">
-              <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+  <NavBar>
+
+  </NavBar>
     <main>
      <div class="container">
       <div class="link">
@@ -36,47 +10,29 @@
       <div class="link">
         <Router-link to="./AddLivro">Adicionar Livros</Router-link>
       </div>
+      <div class=link>
+        <Router-link to="./AddUser">Adicionar Usuário</Router-link>
+      </div>
+      <div class=link>
+        <Router-link to="./ListaLogin">Lista de Usuários</Router-link>
+      </div>
      </div> 
     </main>
 
 </template>
   
-  <script>
-// import { RouterLink } from 'vue-router';
+  <script>  
+  import NavBar from '@/components/NavBar.vue';
 
-  // import BookForm from './AddLivro.vue';
-  // import BookList from './ListaLivro.vue';
-  // import axios from 'axios';
-// import { RouterLink } from 'vue-router';
-
-  // export default {
-  //   components: {
-  //     BookForm,
-  //     BookList
-  //   },
-  //   data() {
-  //     return {
-  //       books: []
-  //     };
-  //   },
-  //   created() {
-  //     this.fetchBooks();
-  //   },
-  //   methods: {
-  //     async fetchBooks() {
-  //       try {
-  //         const response = await axios.get('http://localhost:3000/books');
-  //         this.books = response.data;
-  //       } catch (error) {
-  //         console.error('Erro ao buscar livros:', error);
-  //       }
-  //     }
-  //   }
-  // };
+  export default {
+    components: {
+    NavBar
+  }
+  };
   </script>
   
   <style scoped>
-    .navbar {
+    /* .navbar {
   background-color: #575A5E;
   border-radius: 5px;
   height: 70px;
@@ -87,7 +43,7 @@
   box-sizing: border-box;
   justify-content: space-between;
   padding: 30px;
-}
+} */
 
 .icon {
   list-style-type: none;
@@ -148,19 +104,33 @@
   font-size: 24px;
 }
 
-.container {
-  background-color: white;
-  border-radius: 5px;
-  height: 150px;
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
+  .container {
+    background-color: #575A5E;
+    border-radius: 5px;
+    height: 200px; 
+    width: 300px; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    margin: auto;
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+    padding: 20px;
+  }
 
-.link {
-  color: #575A5E;
-  text-decoration: none;
-}
-  </style>
+  .link {
+    color: white;
+    text-decoration: none;
+    margin: 10px 0; 
+    font-size: 18px;
+  }
+
+  .link:hover {
+    text-decoration: underline;
+  }
+</style>
   

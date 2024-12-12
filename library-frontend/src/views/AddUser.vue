@@ -1,109 +1,43 @@
 <template>
-  <div>
-    <!-- Navbar -->
-    <nav class="navbar">
-      <ul class="icon">
-        <!-- <li>
-          <button @click="toggleSidebar" class="menu-button">
-            <i class="fa-solid fa-bars"></i>
-          </button>
-        </li> -->
-      </ul>
-      <div class="logo">
-        <router-link to="PagInicial">
-          <img src="/logoTransparent.png" alt="Logo"/>
-        </router-link>
-        
-      </div>
-      <div class="search">
-        <input type="text" placeholder="Search ur book ☠️" v-model="searchTerm" />
-      </div>
-      <ul class="right-icons">
-        <li>
-          <button @click="togglePopup" class="skull-button">
-            <i class="fa-solid fa-skull"></i>
-          </button>
-        </li>
-        <li>
-          <button>
-            <i class="fa-solid fa-bell"></i>
-          </button>
-        </li>
-      </ul>
-    </nav>
+  <NavBar></NavBar>
 
-    <!-- <div class="sidebar" :class="{ open: isSidebarOpen }">
-      <ul>
-        <li class="iconE">
-          <i class="fa-solid fa-skull"></i>
-          <p>Usuário</p>
-        </li>
-        <li class="iconE">
-          <i class="fa-solid fa-bell"></i>
-          <p>Notificações</p>
-        </li>
-        <li class="iconE">
-          <i class="fa-solid fa-folder"></i>
-          <p>Relatório</p>
-        </li>
-        <li class="iconE">
-          <i class="fa-solid fa-list"></i>
-          <p>Filtros</p>
-        </li>
-      </ul>
-    </div> -->
+  <div class="form-container">
+    <h2>Adicionar Livro</h2>
+    <form @submit.prevent="addBook">
+      <label for="title">Título:</label>
+      <input type="text" id="title" v-model="book.title" required />
 
-    <div class="popup" v-if="isPopupVisible">
-      <p>Usuário</p>
-      <p>Queen never CRY</p>
-      <p>Who's this DIVA</p>
-    </div>
+      <label for="author">Autor:</label>
+      <input type="text" id="author" v-model="book.author" required />
 
-    <main class="mainContainer">
-      <div class="containerWrapper">
-        <div class="description">
-          <div class="box">
-            <h1>Adicionar Usuário</h1>
-          </div>
-          <form @submit.prevent="submitForm">
-            <div class="inputs">
-              <div class="campo" v-for="(field, index) in formFields" :key="index">
-                <label :for="field.name"><strong>{{ field.label }}:</strong></label>
-                <input
-                  v-if="field.type !== 'file'"
-                  :type="field.type"
-                  :id="field.name"
-                  :name="field.name"
-                  v-model="formData[field.name]"
-                />
-                <input
-                  v-if="field.type === 'file'"
-                  type="file"
-                  :id="field.name"
-                  :name="field.name"
-                  @change="handleFileUpload"
-                />
-              </div>
-            </div>
-            <button type="submit">Enviar</button>
-          </form>
-        </div>
-      </div>
-    </main>
+      <label for="year">Ano de Lançamento:</label>
+      <input type="number" id="year" v-model.number="book.year" required />
 
-    <div v-if="users.length">
-      <h2>Lista de Usuários</h2>
-      <ul>
-        <li v-for="user in users" :key="user.id">
-          <p>{{ user.name }} - {{ user.email }}</p>
-        </li>
-      </ul>
-    </div>
+      <label for="description">Descrição:</label>
+      <input type="text" id="description" v-model="book.description" required />
+
+      <label for="image">Imagem:</label>
+      <input type="file" id="image" @change="handleImageChange" accept="image/*" required />
+
+      <!-- Opção de Status -->
+      <label for="status">Status:</label>
+      <select id="status" v-model="book.status" required>
+        <option value="available">Disponível</option>
+        <option value="unavailable">Indisponível</option>
+      </select>
+
+      <button type="submit">Adicionar Livro</button>
+    </form>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import NavBar from '@/components/NavBar.vue';
 export default {
+  components: {
+    NavBar,
+  },
   data() {
     return {
       // isSidebarOpen: false,
@@ -118,45 +52,65 @@ export default {
       formFields: [
         { name: 'name', label: 'Nome', type: 'text' },
         { name: 'email', label: 'E-mail', type: 'email' },
-        { name: 'permission', label: 'Permissão', type: 'text' },
-        { name: 'contact', label: 'Contato', type: 'text' },
-        { name: 'photo', label: 'Envie uma foto', type: 'file' },
+        { name: 'password', label: 'Senha', type: 'password' },
       ],
-      users: [], // Lista de usuários para exibir
-      searchTerm: '', // Termo de busca para usuários ou livros
+      users: [], 
+      searchTerm: '', 
     };
   },
   methods: {
-    // toggleSidebar() {
-    //   this.isSidebarOpen = !this.isSidebarOpen;
-    // },
-    // togglePopup() {
-    //   this.isPopupVisible = !this.isPopupVisible;
-    // },
-    handleFileUpload(event) {
-      const file = event.target.files[0];
-      this.formData.photo = file;
-    },
-    submitForm() {
-      console.log('Form Submitted:', this.formData);
-      this.addUser();
-      this.resetForm();
-    },
-    resetForm() {
-      this.formData = {
-        name: '',
-        email: '',
-        permission: '',
-        contact: '',
-        photo: null,
-      };
-    },
-    addUser() {
-      const newUser = { ...this.formData, id: Date.now() }; // Simulação de ID único
-      this.users.push(newUser); // Adiciona o usuário à lista
-      alert('Usuário adicionado com sucesso!');
-    },
-  },
+    methods: {
+  // Método para adicionar o livro
+  async addBook() {
+    const formData = new FormData();
+    formData.append('title', this.book.title);
+    formData.append('author', this.book.author);
+    formData.append('year', this.book.year);
+    formData.append('description', this.book.description);
+
+    // Verifica se a imagem foi selecionada
+    if (this.book.image) {
+      formData.append('image', this.book.image);
+    } else {
+      console.error('Nenhuma imagem selecionada.');
+      return; // Retorna se não houver imagem
+    }
+
+    // Adiciona o status do livro ao formData
+    formData.append('status', this.book.status);
+
+    // Log dos dados que estão sendo enviados
+    console.log('Dados enviados:', {
+      title: this.book.title,
+      author: this.book.author,
+      year: this.book.year,
+      description: this.book.description,
+      image: this.book.image ? this.book.image.name : 'Nenhuma imagem',
+      status: this.book.status
+    });
+
+    try {
+      const response = await axios.post('http://localhost:3000/api/books', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      console.log('Livro adicionado:', response.data);
+
+      // Limpa o formulário após o envio
+      this.book = { title: '', author: '', year: null, description: '', image: null, status: 'available' };
+
+      this.$emit('book-added', response.data);
+
+    } catch (error) {
+      console.error('Erro ao adicionar livro:', error.response ? error.response.data : error.message);
+      if (error.response && error.response.data) {
+        console.error('Mensagem de erro do servidor:', error.response.data.message);
+      }
+    }
+  }
+}
 };
 </script>
 

@@ -23,6 +23,8 @@ const bookRoutes = require('./routes/books');
 app.use('/api/books', bookRoutes);
 app.use('/api/auth', authRoutes);
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Definir a porta do servidor
 app.listen(3000, () => {
     console.log('Servidor rodando na porta 3000');

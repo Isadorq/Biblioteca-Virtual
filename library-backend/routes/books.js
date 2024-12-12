@@ -7,8 +7,8 @@ const router = express.Router();
 // Configuração do multer
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        // Definir o destino para salvar as imagens na pasta 'uploads'
-        cb(null, path.join(__dirname, '../uploads')); 
+        // Definir o destino para salvar as imagens na pasta 'public/uploads'
+        cb(null, path.join(__dirname, '../public/uploads')); 
     },
     filename: (req, file, cb) => {
         // Renomear o arquivo para evitar conflitos, usando o timestamp
@@ -19,23 +19,34 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // ** CRIAÇÃO (POST) ** 
-router.post('/', u pload.single('image'), async (req, res) => {
+router.post('/', upload.single('image'), async (req, res) => {
     console.log(req.body); // Exibe os dados recebidos
     console.log(req.file); // Exibe os dados do arquivo enviado
-
+  
     // Desestruturação dos dados enviados no corpo da requisição
-    const { title, author, year, description } = req.body;
-    
+    const { title, author, year, description, status } = req.body;
+  
     // Verifica se todos os campos foram preenchidos
     if (!title || !author || !year || !description || !req.file) {
         return res.status(400).json({ message: 'Por favor, preencha todos os campos e envie uma imagem.' });
     }
-
-    const imagePath = req.file.path; // Caminho da imagem enviada
-
+  
+    // Caminho da imagem dentro da pasta 'public/uploads'
+    const imagePath = '/uploads/' + req.file.filename; // Usando o nome do arquivo gerado para salvar no banco
+  
+    // Define a disponibilidade com base no status enviado (se "available" ou "unavailable")
+    const isAvailable = status === 'available'; // Define como true ou false
+  
     // Cria um novo livro com os dados recebidos
-    const newBook = new Book({ title, author, year, description, image: imagePath });
-
+    const newBook = new Book({ 
+        title, 
+        author, 
+        year, 
+        description, 
+        image: imagePath,
+        available: isAvailable 
+    });
+  
     try {
         // Salva o novo livro no banco de dados
         await newBook.save();
@@ -44,6 +55,8 @@ router.post('/', u pload.single('image'), async (req, res) => {
         res.status(500).json({ message: 'Erro ao salvar o livro', error });
     }
 });
+  
+  
 
 // ** LEITURA (GET) ** 
 router.get('/', async (req, res) => {
@@ -87,6 +100,6 @@ deleteBook(bookId) {
         console.error('Erro ao deletar livro:', error.response || error.message);
         this.books = originalBooks; // Reverte se falhar
       });
-}
-  
+};
+
 module.exports = router;

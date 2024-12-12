@@ -1,48 +1,19 @@
 <template>
   <div>
-    <nav>
-      <div class="navbar">
-        <ul class="icon">
-          <li>
-            <!-- <a href="#sidebar">
-              <i class="fa-solid fa-bars" style="color: #ffffff;"></i>
-            </a> -->
-          </li>
-        </ul>
-        <div class="logo">
-          <router-link to="/PagInicial">
-            <img src="/logoTransparent.png" alt="Logo" />
-          </router-link>
-        </div>
-        <div class="search">
-          <input type="text" placeholder="Search your book ☠️" v-model="searchQuery" />
-        </div>
-        <ul class="right-icons">
-          <li>
-            <a href="#user">
-              <i class="fa-solid fa-skull" style="color: #ffffff;"></i>
-            </a>
-          </li>
-          <li>
-            <a href="#notifications">
-              <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <NavBar>
+    </NavBar>
 
     <main>
       <div class="main-container">
         <div class="top-container">
           <h1>Informações do Usuário</h1>
-          <div class="description" v-if="user">
-            <p><strong>Nome:</strong> {{ user.name }}</p>
-            <p><strong>Email:</strong> {{ user.email }}</p>
-            <!-- Adicione outras informações que você queira exibir -->
-          </div>
-          <div v-else>
-            <p>Carregando informações do usuário...</p>
+          <div class="description">
+            <p><strong>Nome:</strong> John Doe</p>
+            <p><strong>Email:</strong> johndoe@example.com</p>
+            <!-- Exibir gráfico aqui -->
+            <div>
+              <Bar :chart-data="chartData" :options="chartOptions" />
+            </div>
           </div>
         </div>
       </div>
@@ -55,40 +26,42 @@
 </template>
 
 <script>
-// Supondo que você tenha o axios configurado para fazer as requisições
-import axios from 'axios';
+// Importando as dependências necessárias do Chart.js e vue-chartjs
+import { Bar } from 'vue-chartjs';
+import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+
+// Registrando os componentes necessários do Chart.js
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 export default {
+  name: 'UserPage',
+  components: {
+    Bar, // Componente de gráfico de barras
+  },
   data() {
     return {
-      user: null,  // Armazena as informações do usuário
       searchQuery: '',
+      chartData: {
+        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio'], // Labels para o gráfico
+        datasets: [
+          {
+            label: 'Livros Lidos',
+            data: [5, 9, 7, 4, 8], // Dados do gráfico (quantidade de livros lidos por mês)
+            backgroundColor: '#42A5F5', // Cor das barras
+            borderColor: '#1E88E5', // Cor da borda das barras
+            borderWidth: 1,
+          },
+        ],
+      },
+      chartOptions: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
     };
-  },
-  created() {
-    this.fetchUserData();
-  },
-  methods: {
-    // Método para buscar os dados do usuário
-    async fetchUserData() {
-      try {
-        // Suponha que o token de autenticação esteja no localStorage (ou você pode enviar o token via headers)
-        const token = localStorage.getItem('token'); 
-        
-        // Faça a requisição para buscar os dados do usuário
-        const response = await axios.get('https://sua-api.com/user/me', {
-          headers: {
-            Authorization: `Bearer ${token}`,  // Se for necessário o token no header
-          }
-        });
-
-        // Armazene os dados do usuário na variável
-        this.user = response.data;
-      } catch (error) {
-        console.error('Erro ao carregar os dados do usuário', error);
-        // Aqui você pode tratar o erro, redirecionar para o login, etc.
-      }
-    },
   },
 };
 </script>
