@@ -48,9 +48,10 @@ const router = createRouter({
       component: AddUser,
     },
     {
-      path: '/DescLivro',
-      name: 'desclivro',
+      path: '/DescLivro', 
+      name: 'DescLivro',
       component: DescLivro,
+      props: true,
     },
     {
       path: '/PagUser',

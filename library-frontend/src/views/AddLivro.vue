@@ -37,11 +37,13 @@
       <input type="text" id="author" v-model="book.author" required />
 
       <label for="year">Ano de Lançamento:</label>
-      <input type="number" id="year" v-model="book.year" required />
+      <input type="number" id="year" v-model.number="book.year" required />
 
-      <!-- Campo para upload da imagem -->
+      <label for="description">Descrição:</label>
+      <input type="text" id="description" v-model="book.description" required />
+
       <label for="image">Imagem:</label>
-      <input type="file" id="image" @change="onFileChange" accept="image/*" required />
+      <input type="file" id="image" @change="handleImageChange" accept="image/*" required />
 
       <button type="submit">Adicionar Livro</button>
     </form>
@@ -49,54 +51,79 @@
 </template>
 
 <script>
-import axios from 'axios';
-
 export default {
   data() {
     return {
       book: {
         title: '',
         author: '',
-        year: '',
-        image: null // Para armazenar a imagem selecionada
+        year: null,
+        description: '',
+        image: null
       }
     };
   },
   methods: {
-    onFileChange(event) {
-      this.book.image = event.target.files[0]; // Armazena o arquivo selecionado
+    // Método para lidar com a mudança do arquivo de imagem
+    handleImageChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.book.image = file;
+      }
     },
+
+    // Método para adicionar o livro
     async addBook() {
-      const formData = new FormData(); // Cria um objeto FormData
+      const formData = new FormData();
       formData.append('title', this.book.title);
       formData.append('author', this.book.author);
       formData.append('year', this.book.year);
-      formData.append('image', this.book.image); // Adiciona a imagem ao FormData
+      formData.append('description', this.book.description);
+
+      // Verifica se a imagem foi selecionada
+      if (this.book.image) {
+        formData.append('image', this.book.image);
+      } else {
+        console.error('Nenhuma imagem selecionada.');
+        return; // Retorna se não houver imagem
+      }
+
+      // Log dos dados que estão sendo enviados
+      console.log('Dados enviados:', {
+        title: this.book.title,
+        author: this.book.author,
+        year: this.book.year,
+        description: this.book.description,
+        image: this.book.image ? this.book.image.name : 'Nenhuma imagem'
+      });
 
       try {
         const response = await axios.post('http://localhost:3000/api/books', formData, {
           headers: {
-            'Content-Type': 'multipart/form-data' // Define o tipo de conteúdo como multipart/form-data
+            'Content-Type': 'multipart/form-data'
           }
         });
 
         console.log('Livro adicionado:', response.data);
 
         // Limpa o formulário após o envio
-        this.book = { title: '', author: '', year: '', image: null };
+        this.book = { title: '', author: '', year: null, description: '', image: null };
 
-        this.$emit('book-added', response.data); // Emite o evento para atualizar a lista de livros
+        this.$emit('book-added', response.data);
 
       } catch (error) {
-        console.error('Erro ao adicionar livro:', error);
+        console.error('Erro ao adicionar livro:', error.response ? error.response.data : error.message);
+        if (error.response && error.response.data) {
+          console.error('Mensagem de erro do servidor:', error.response.data.message);
+        }
       }
     }
   }
 };
 </script>
-  
-  <style scoped>
-  body {
+
+<style scoped>
+body {
   background-color: #727374;
   font-family: 'Texturina', serif;
 }
@@ -110,8 +137,6 @@ export default {
   align-items: center;
   padding: 0 20px;
   box-sizing: border-box;
-  justify-content: space-between;
-  padding: 30px;
 }
 
 .icon {
@@ -119,7 +144,6 @@ export default {
   display: flex;
   margin: 0;
   padding: 0;
-  align-items: center;
 }
 
 .logo img {
@@ -128,11 +152,7 @@ export default {
 }
 
 .search input {
-  width: 134px;
-  height: 15px;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  width: auto; /* Ajuste para ser responsivo */
 }
 
 .right-icons {
@@ -144,38 +164,38 @@ export default {
 .right-icons li {
   margin-left: 20px;
 }
-  .form-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    width: 100%;
-    max-width: 500px;
-    margin: 20px auto;
-  }
-  
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  input {
-    margin-bottom: 10px;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-  }
-  
-  button {
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  </style>
-  
+
+.form-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: calc(100% - 40px); /* Ajusta a largura */
+  max-width: 500px; /* Largura máxima */
+  margin: 20px auto; /* Centraliza o formulário */
+}
+
+form {
+  display: flex;
+  flex-direction: column; /* Alinha os elementos em coluna */
+}
+
+input {
+  margin-bottom: 10px; /* Espaçamento entre os inputs */
+  padding: 8px; /* Preenchimento interno */
+  border-radius: 4px; /* Bordas arredondadas */
+  border: 1px solid #ccc; /* Borda cinza */
+}
+
+button {
+  padding: 10px; /* Preenchimento interno do botão */
+  background-color: #4CAF50; /* Cor de fundo verde */
+  color: white; /* Cor do texto branco */
+  border: none; /* Remove borda padrão */
+  cursor: pointer; /* Cursor de ponteiro ao passar o mouse */
+  border-radius: 4px; /* Bordas arredondadas */
+}
+
+button:hover {
+   background-color: #45a049; /* Cor de fundo ao passar o mouse */
+}
+</style>

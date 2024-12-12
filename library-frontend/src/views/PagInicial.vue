@@ -2,7 +2,47 @@
   <div>
     <nav>
       <div class="navbar">
-        <!-- Navbar Content -->
+        <ul class="icon" style="list-style-type: none;">
+          <li>
+            <!-- Ícone de menu removido ou pode ser adicionado aqui -->
+          </li>
+        </ul>
+        
+        <!-- Logo -->
+        <div class="logo">
+          <router-link to="/PagInicial">
+            <img src="/logoTransparent.png" alt="Logo" />
+          </router-link>
+        </div>
+
+        <!-- Links adicionais ao lado da logo -->
+        <div class="nav-links">
+          <router-link to="/MaisLivros" class="nav-link">Mais Livros</router-link>
+          <router-link to="/ListaLogin" class="nav-link">Lista Login</router-link>
+        </div>
+
+        <!-- Barra de pesquisa -->
+        <div class="search">
+          <input
+            type="text"
+            placeholder="Pesquise o livro ou ID"
+            v-model="searchQuery"
+            @input="filterBooks"
+          />
+        </div>
+
+        <ul class="right-icons" style="list-style-type: none;">
+          <li>
+            <a href="#user">
+              <i class="fa-solid fa-skull" style="color: #ffffff;"></i>
+            </a>
+          </li>
+          <li>
+            <a href="#notifications">
+              <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
+            </a>
+          </li>
+        </ul>
       </div>
     </nav>
 
@@ -12,11 +52,14 @@
       </div>
 
       <div class="container">
-        <div class="livro" v-for="(book, index) in books" :key="index">
-          <img :src="book.image" alt="Book" v-if="book.image"> <!-- Verifica se a imagem existe -->
-          <h3>{{ book.title }}</h3>
-          <p>Autor: {{ book.author }}</p>
-          <p>Ano: {{ book.year }}</p>
+        <div class="livro" v-for="(book, index) in filteredBooks" :key="index">
+          <router-link v-if="book._id" :to="'/livro/' + book._id">
+            <img :src="book.image" alt="Book" v-if="book.image">
+            <h3>{{ book.title }}</h3>
+            <p>Autor: {{ book.author }}</p>
+            <p>Ano: {{ book.year }}</p>
+          </router-link>
+          <p v-else>Este livro não tem ID válido.</p>
         </div>
       </div>
     </main>
@@ -31,27 +74,38 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      books: [] // Array para armazenar os livros
+      books: [],
+      searchQuery: '',
+      filteredBooks: []
     };
   },
   async mounted() {
-    await this.fetchBooks(); // Chama a função para buscar os livros ao montar o componente
+    await this.fetchBooks();
   },
   methods: {
     async fetchBooks() {
       try {
-        const response = await axios.get('http://localhost:3000/api/books'); // URL da sua API
-        this.books = response.data; // Armazena os livros no estado do componente
+        const response = await axios.get('http://localhost:3000/api/books');
+        this.books = response.data;
+        this.filteredBooks = this.books;
       } catch (error) {
         console.error('Erro ao buscar livros:', error);
       }
+    },
+    filterBooks() {
+      const query = this.searchQuery.toLowerCase();
+      this.filteredBooks = this.books.filter(book => {
+        return (
+          book.title.toLowerCase().includes(query) ||
+          book._id.includes(query)
+        );
+      });
     }
   }
 };
 </script>
 
 <style scoped>
-
 .navbar {
   background-color: #575A5E;
   border-radius: 5px;
@@ -62,15 +116,6 @@ export default {
   padding: 0 20px;
   box-sizing: border-box;
   justify-content: space-between;
-  padding: 30px;
-}
-
-.icon {
-  list-style-type: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
-  align-items: center; 
 }
 
 .logo {
@@ -85,13 +130,29 @@ export default {
   display: block;
 }
 
+.nav-links {
+  display: flex;
+  gap: 20px;
+  margin-left: 20px;
+}
+
+.nav-link {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+.nav-link:hover {
+  text-decoration: underline;
+}
+
 .search {
   display: flex;
   justify-content: center;
   height: 35px;
-  margin-left: 20px; 
+  margin-left: 20px;
   border-radius: 5px;
-  flex: 1; 
+  flex: 1;
 }
 
 .search input {
@@ -103,7 +164,6 @@ export default {
 }
 
 .right-icons {
-  list-style-type: none;
   display: flex;
   align-items: center;
   margin: 0;
@@ -141,7 +201,7 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-top: 28px;
-  width: 100%; 
+  flex-wrap: wrap;
 }
 
 .livro {
@@ -150,7 +210,10 @@ export default {
   height: 342px;
   border-radius: 5px;
   display: flex;
+  flex-direction: column;
   justify-content: center;
+  margin: 10px;
+  padding: 10px;
 }
 
 .livro img {
@@ -158,77 +221,12 @@ export default {
   margin-top: 10px;
 }
 
-.star {
-  display: flex;    
-  justify-content: center;
-}
-
-/* .sidebar {
-  position: fixed;
-  top: 0;
-  left: -250px;
-  width: 155px;
-  height: 100%;
-  background-color: #575A5E;
-  color: white;
-  overflow-y: auto;
-  transition: left 0.3s ease, opacity 0.3s ease;
-  display: flex;
-  /* flex-direction: column; */
-  /* align-items: center; */
-  /* justify-content: center; */
-  /* gap: 20px; */
-  /* z-index: 1000; */
-/* } */
-
-/* .sidebar.open {
-  left: 0;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-} */
-
-.iconE {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: white;
-  font-size: 18px;
-  width: 45px;
-  height: 45px;
-  margin-left: 16px;
-}
-
-.iconE i {
-  font-size: 24px;
+.livro h3, .livro p {
   color: white;
 }
 
-.iconE .letter {
-  color: white;
-}
-
-.list {
-  display: flex;
-  flex-direction: row;
-
-}
-
-.link {
-  color: white;
+.livro a {
+  color: inherit;
   text-decoration: none;
-  margin-left: 20px;
 }
-
-.container {
-  background-color: black;
-}
-
 </style>

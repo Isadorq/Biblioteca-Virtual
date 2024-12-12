@@ -1,58 +1,50 @@
 <template>
-  <div class="main-container">
-    <div class="containerReg">
-      <div class="title">
-        <h1>Login</h1>
+  <div class="login">
+    <h1>Login</h1>
+    <form @submit.prevent="handleLogin">
+      <div class="input-container">
+        <label for="username">Username</label>
+        <input type="text" v-model="username" id="username" required />
       </div>
-
-      <div class="put">
-        <input type="text" v-model="username" placeholder="Usuário" />
-        <input type="password" v-model="password" placeholder="Senha" />
+      <div class="input-container">
+        <label for="password">Password</label>
+        <input type="password" v-model="password" id="password" required />
       </div>
-
-      <div class="button">
-        <div class="send">
-          <input type="button" value="Enviar" @click.prevent="handleLogin" />
-        </div>
-        <div class="register">
-          <router-link to="/PagCadastro">
-            <input type="button" value="Cadastre-se" />
-          </router-link>
-        </div>
+      <div class="button-container">
+        <button type="submit">Login</button>
+        <router-link to="/PagCadastro" class="register-link">Cadastro</router-link>
       </div>
-    </div>
-    <div class="image">
-      <img src="/logoTransparent.png" alt="">
-    </div>
+    </form>
   </div>
 </template>
 
 <script>
-// export default {
-//   data() {
-//     return {
-//       username: '',
-//       email: '',
-//       password: '',
-//     };
-//   },
-//   methods: {
-//     handleLogin() {
-//       if (this.username && this.password) {
-//         this.$router.push({ name: 'inicio' });
-//       } else {
-//         alert('Por favor, preencha todos os campos!');
-//       }
-//     },
-//   },
-// };
+export default {
+  data() {
+    return {
+      username: '',
+      password: '',
+    };
+  },
+  methods: {
+    async handleLogin() {
+      if (this.username && this.password) {
+        // Aqui você pode chamar a API de login
+        alert('Login realizado com sucesso!');
+        // Redireciona para a página principal após login
+        this.$router.push('/dashboard');
+      } else {
+        alert('Por favor, preencha todos os campos.');
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>
-
 body {
-  background-color: #727374;
-  font-family: 'Texturina', serif;
+  background-color: #f0f0f0;
+  font-family: 'Arial', sans-serif;
   margin: 0;
   height: 100vh;
   display: flex;
@@ -60,132 +52,70 @@ body {
   align-items: center;
 }
 
-.main-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-top: 80px; 
-  width: 100%;
-  height: calc(100vh - 80px); 
-}
-
-/* Registration container */
-.containerReg {
+.login {
   background-color: white;
-  border-radius: 5px;
-  width: 600px;
-  padding: 20px;
-  box-sizing: border-box;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.title h1 {
+h1 {
   text-align: center;
   margin-bottom: 20px;
 }
 
-.put {
+.input-container {
   width: 100%;
+  margin-bottom: 15px;
 }
 
-.put input {
+.input-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 14px;
+}
+
+.input-container input {
   width: 100%;
   padding: 10px;
-  margin-bottom: 15px;
+  font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  box-sizing: border-box;
 }
 
-.button {
+.button-container {
   display: flex;
-  justify-content: center;
-  gap: 15px;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
 }
 
-.send input,
-.register input {
+button {
   padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4CAF50;
+  color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
-  background-color: #727374;
-  color: white;
-  width: 100%;
 }
 
-img{
-  display: flex;
-  width: 200px;
-  height: auto;
-  justify-content: flex-end;
+button:hover {
+  background-color: #45a049;
 }
 
+.register-link {
+  font-size: 14px;
+  color: #007BFF;
+  text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
 </style>
-
-<!-- <template>
-  <div class="login">
-      <h1>Login</h1>
-      <form @submit.prevent="loginUser">
-          <div>
-              <label>Email:</label>
-              <input v-model="email" type="email" required>
-          </div>
-          <div>
-              <label>Senha:</label>
-              <input v-model="password" type="password" required />
-          </div>
-          <button type="submit">Login</button>
-      </form>
-      <p v-if="message">{{ message }}</p>
-  </div>
-  
-</template>
-
-<script>
-import api from '../axios'; // Importa a configuração do Axios
-
-export default {
-  data() {
-      return {
-          email: '',
-          password: '',
-          message: '',
-      };
-  },
-  methods: {
-      async loginUser() {
-          try {
-              const response = await api.post('/auth/login', {
-                  email: this.email,
-                  password: this.password,
-              });
-              this.message = 'Login bem-sucedido!';
-              localStorage.setItem('token', response.data.token);     // Armazena o token JWT no localStorage
-              this.$router.push('/dashboard');        // Redireciona para a página principal após o login
-          }   catch(error) {
-              this.message = error.response && error.response.data && error.response.data.message
-              ? error.response.data.message
-              : 'Erro ao fazer login';
-          }
-      },
-  },
-};
-</script>
-
-<style scoped>
-.login{ 
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  text-align: center;
-  background-color: white;
-}
-</style> -->
