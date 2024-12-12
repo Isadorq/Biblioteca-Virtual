@@ -1,16 +1,19 @@
 <template>
-  <div id="app">
+  <div>
     <!-- Navbar -->
-    <nav class="navbar" :class="{ shift: isSidebarOpen }">
+    <nav class="navbar">
       <ul class="icon">
-        <li>
+        <!-- <li>
           <button @click="toggleSidebar" class="menu-button">
             <i class="fa-solid fa-bars"></i>
           </button>
-        </li>
+        </li> -->
       </ul>
       <div class="logo">
-        <img src="/public/logoTransparent.png" alt="Logo" />
+        <router-link to="PagInicial">
+          <img src="/logoTransparent.png" alt="Logo"/>
+        </router-link>
+        
       </div>
       <div class="search">
         <input type="text" placeholder="Search ur book ☠️" v-model="searchTerm" />
@@ -29,8 +32,7 @@
       </ul>
     </nav>
 
-    <!-- Sidebar -->
-    <div class="sidebar" :class="{ open: isSidebarOpen }">
+    <!-- <div class="sidebar" :class="{ open: isSidebarOpen }">
       <ul>
         <li class="iconE">
           <i class="fa-solid fa-skull"></i>
@@ -49,16 +51,14 @@
           <p>Filtros</p>
         </li>
       </ul>
-    </div>
+    </div> -->
 
-    <!-- Popup -->
     <div class="popup" v-if="isPopupVisible">
       <p>Usuário</p>
       <p>Queen never CRY</p>
       <p>Who's this DIVA</p>
     </div>
 
-    <!-- Main Content -->
     <main class="mainContainer">
       <div class="containerWrapper">
         <div class="description">
@@ -91,7 +91,6 @@
       </div>
     </main>
 
-    <!-- List of Users (optional) -->
     <div v-if="users.length">
       <h2>Lista de Usuários</h2>
       <ul>
@@ -107,8 +106,8 @@
 export default {
   data() {
     return {
-      isSidebarOpen: false,
-      isPopupVisible: false,
+      // isSidebarOpen: false,
+      // isPopupVisible: false,
       formData: {
         name: '',
         email: '',
@@ -128,12 +127,12 @@ export default {
     };
   },
   methods: {
-    toggleSidebar() {
-      this.isSidebarOpen = !this.isSidebarOpen;
-    },
-    togglePopup() {
-      this.isPopupVisible = !this.isPopupVisible;
-    },
+    // toggleSidebar() {
+    //   this.isSidebarOpen = !this.isSidebarOpen;
+    // },
+    // togglePopup() {
+    //   this.isPopupVisible = !this.isPopupVisible;
+    // },
     handleFileUpload(event) {
       const file = event.target.files[0];
       this.formData.photo = file;
@@ -168,20 +167,26 @@ body {
 }
 
 .navbar {
-  background-color: #575a5e;
+  background-color: #575A5E;
+  border-radius: 5px;
   height: 70px;
+  width: 100%;
   display: flex;
   align-items: center;
   padding: 0 20px;
-  transition: margin-left 0.3s ease-in-out;
+  box-sizing: border-box;
+  justify-content: space-between;
+  padding: 30px;
 }
 
-.navbar.shift {
-  margin-left: 250px;
-}
 
 .logo img {
   width: 80px;
+  text-decoration: none;
+}
+
+img:hover {
+  text-decoration: underline;
 }
 
 .search input {
@@ -197,7 +202,7 @@ body {
   cursor: pointer;
 }
 
-.sidebar {
+/* .sidebar {
   position: fixed;
   top: 0;
   left: -250px;
@@ -206,11 +211,11 @@ body {
   background-color: #575a5e;
   color: white;
   transition: left 0.3s ease-in-out;
-}
-
+} */
+/* 
 .sidebar.open {
   left: 0;
-}
+} */
 
 .popup {
   position: absolute;
@@ -223,14 +228,30 @@ body {
   z-index: 1000;
 }
 
+.mainContainer {
+  width: 100%; /* Garante que o container ocupe a largura disponível */
+  max-width: 600px; /* Define um limite máximo para a largura do conteúdo */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
 .description {
   background-color: white;
   padding: 20px;
   border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column; /* Alinha os elementos na vertical */
+  justify-content: flex-start; /* Alinha os elementos no topo */
+}
+
+.description h1 {
+  margin-bottom: 20px; /* Espaçamento entre o título e o formulário */
 }
 
 .inputs .campo {
-  margin-bottom: 15px;
+  margin-bottom: 15px; /* Espaçamento entre os campos de input */
 }
 
 button {

@@ -4,13 +4,15 @@
       <div class="navbar">
         <ul class="icon">
           <li>
-            <a href="#sidebar">
+            <!-- <a href="#sidebar">
               <i class="fa-solid fa-bars" style="color: #ffffff;"></i>
-            </a>
+            </a> -->
           </li>
         </ul>
         <div class="logo">
-          <img src="/logoTransparent.png" alt="Logo" />
+          <router-link to="/PagInicial">
+            <img src="/logoTransparent.png" alt="Logo" />
+          </router-link>
         </div>
         <div class="search">
           <input type="text" placeholder="Search your book ☠️" v-model="searchQuery" />
@@ -36,27 +38,101 @@
       </section>
 
       <div class="main-container">
-        <div class="container">
-          <!-- Conteúdo dinâmico aqui -->
-        </div>
-        <div class="container-wrapper">
+        <div class="top-container">
+          <div class="book-stars-container">
+            <div class="book"></div>
+            <div class="stars-container">
+              <div class="star">
+                <i class="fa-solid fa-star" style="color: #ffffff;"></i>
+              </div>
+              <div class="star">
+                <i class="fa-solid fa-star" style="color: #ffffff;"></i>
+              </div>
+              <div class="star">
+                <i class="fa-solid fa-star" style="color: #ffffff;"></i>
+              </div>
+              <div class="star">
+                <i class="fa-regular fa-star" style="color: #ffffff;"></i>
+              </div>
+              <div class="star">
+                <i class="fa-regular fa-star" style="color: #ffffff;"></i>
+              </div>
+            </div>
+          </div>
           <div class="description">
             <p>{{ description }}</p>
           </div>
         </div>
-      </div>
 
-      <form class="inputs" @submit.prevent="submitForm">
-        <div class="field" v-for="(field, index) in fields" :key="index">
-          <label :for="field.id"><strong>{{ field.label }}</strong></label>
-          <input type="text" :id="field.id" v-model="field.value" />
+        <div class="container">
+          <form class="inputs" @submit.prevent="submitForm">
+            <div class="row">
+              <div class="field">
+                <strong>Gênero:</strong>
+                <input type="text" v-model="genre" />
+              </div>
+              <div class="field">
+                <strong>Autor:</strong>
+                <input type="text" v-model="author" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <strong>Ano de publicação:</strong>
+                <input type="text" v-model="year" />
+              </div>
+              <div class="field">
+                <strong>Código:</strong>
+                <input type="text" v-model="code" />
+              </div>
+            </div>
+            <div class="row">
+              <div class="field">
+                <strong>Status:</strong>
+                <input type="text" v-model="status" />
+              </div>
+              <div class="field">
+                <strong>Quantidade:</strong>
+                <input type="text" v-model="quantity" />
+              </div>
+            </div>
+          </form>
         </div>
-        <button type="submit">Enviar</button>
-      </form>
+      </div>
+      <div class="comments">
+        <div class="comment">
+          <div class="iconn">
+            <i class="fa-solid fa-comment" style="color: #000000;"></i>
+          </div>
+          <div class="strela">
+            <i class="fa-solid fa-star" style="color: #000000;"></i>
+          </div>
+          <div class="strela">
+            <i class="fa-solid fa-star" style="color: #000000;"></i>
+          </div>
+            <p>
+              Muito bom!
+            </p>
+        </div>
+        <div class="comment">
+          <div class="iconn">
+            <i class="fa-solid fa-comment" style="color: #000000;"></i>
+          </div>
+          <div class="strela">
+            <i class="fa-solid fa-star" style="color: #000000;"></i>
+          </div>
+          <div class="strela">
+            <i class="fa-solid fa-star" style="color: #000000;"></i>
+          </div>
+            <p>
+              Horrível!
+            </p>
+        </div>
+      </div>
     </main>
 
     <footer>
-      <!-- Conteúdo do rodapé -->
+      
     </footer>
   </div>
 </template>
@@ -68,6 +144,12 @@ export default {
       searchQuery: "",
       title: "Título",
       description: `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec consequat ipsum sem, luctus bibendum risus egestas in.`,
+      genre: "",
+      author: "",
+      year: "",
+      code: "",
+      status: "",
+      quantity: "",
       fields: [
         { id: "genre", label: "Gênero", value: "" },
         { id: "author", label: "Autor", value: "" },
@@ -152,53 +234,100 @@ body {
 
 .main-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   gap: 30px;
   margin-top: 30px;
 }
 
-.container,
+.top-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+}
+
+.book-stars-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.book {
+  background-color: #575A5E;
+  width: 274px;
+  height: 407px;
+}
+
+.stars-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.star {
+  font-size: 24px;
+}
+
 .description {
   background-color: white;
-  border-radius: 5px;
-  width: 300px;
   padding: 15px;
+  border-radius: 5px;
+  margin-left: 20px;
+  width: 622px;
+  height: 488px;
+}
+
+.container {
+  background-color: white;
+  border-radius: 5px;
+  width: 600px; 
+  padding: 15px;
+  margin-top: 30px;  
 }
 
 .inputs {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  width: 200px;
-}
-
-.field label {
-  margin-bottom: 5px;
+  width: 45%;  
 }
 
 .field input {
   padding: 8px;
   border: 1px solid #ccc;
   border-radius: 5px;
+  width: 105px;
 }
 
-button {
-  background-color: #575a5e;
-  color: white;
-  border: none;
-  padding: 10px 20px;
+.comment {
+  background-color: white;
   border-radius: 5px;
-  cursor: pointer;
+  width: 382px;
+  height: 126px;
 }
 
-button:hover {
-  background-color: #4a4d4e;
+.comments .comment .strela {
+  display: inline-flex;
+  margin-right: 5px;
 }
+
+.comments {
+  display: flex;
+  margin-top: 50px;
+}
+
 </style>

@@ -4,50 +4,60 @@ import AddUser from '@/views/AddUser.vue';
 import DescLivro from '@/views/DescLivro.vue';
 import PagCadastro from '@/views/PagCadastro.vue';
 import PagInicial from '@/views/PagInicial.vue';
-import PagInicio from '@/views/PagInicio.vue';
+import ListaLivro from '@/views/ListaLivro.vue';
+import PagUser from '@/views/PagUser.vue';
 import AddLivro from '@/views/AddLivro.vue';
-
-const routes = [
-  {
-    path: '/',  
-    name: 'inicio',
-    component: PagInicio, 
-  },
-  {
-    path: '/PagLogin',
-    name: 'login',
-    component: PagLogin,
-  },
-  {
-    path: '/PagCadastro',
-    name: 'cadastro',
-    component: PagCadastro,
-  },
-  {
-    path: '/PagInicial',
-    name: 'inicial',
-    component: PagInicial,
-  },
-  {
-    path: '/AddLivro',
-    name: 'addlivro',
-    component: AddLivro,
-  },
-  {
-    path: '/AddUser',
-    name: 'adduser',
-    component: AddUser,
-  },
-  {
-    path: '/DescLivro',
-    name: 'desclivro',
-    component: DescLivro,
-  },
-];
+import MaisLivros from '@/views/MaisLivros.vue';
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes: [
+    {
+      path: '/AddLivro',
+      name: 'addlivro',
+      component: AddLivro,
+    },
+    {
+      path: '/MaisLivros',
+      name:'maislivros',
+      component: MaisLivros,
+    },
+    {
+      path: '/PagLogin',
+      name: 'login',
+      component: PagLogin,
+    },
+    {
+      path: '/PagCadastro',
+      name: 'cadastro',
+      component: PagCadastro,
+    },
+    {
+      path: '/PagInicial',
+      name: 'inicial',
+      component: PagInicial,
+    },
+    {
+      path: '/ListaLivro',
+      name: 'listalivro',
+      component: ListaLivro,
+    },
+    {
+      path: '/AddUser',
+      name: 'adduser',
+      component: AddUser,
+    },
+    {
+      path: '/DescLivro',
+      name: 'desclivro',
+      component: DescLivro,
+    },
+    {
+      path: '/PagUser',
+      name: 'paguser',
+      component: PagUser,
+    },
+  ]
 });
 
 export default router;

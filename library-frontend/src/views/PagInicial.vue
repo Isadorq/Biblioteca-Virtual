@@ -1,59 +1,8 @@
 <template>
-  <div id="app">
+  <div>
     <nav>
       <div class="navbar">
-        <ul class="icon">
-          <li>
-            <a href="#" id="menu-toggle" @click="toggleSidebar">
-              <i class="fa-solid fa-bars" style="color: #ffffff;"></i>
-            </a>
-          </li>
-        </ul>
-        <div class="logo">
-          <img src="/logoTransparent.png" alt="Logo">
-        </div>
-        <div class="search">
-          <input type="text" placeholder="Search ur book ☠️">
-        </div>
-        <ul class="right-icons">
-          <li>
-            <a href="#" id="skull-toggle" @click="togglePopup">
-              <i class="fa-solid fa-skull" style="color: #ffffff;"></i>
-            </a>
-          </li>
-          <li>
-            <a href="#notifications">
-              <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
-            </a>
-          </li>
-        </ul>
-
-        <div class="popup" v-show="isPopupVisible">
-          <p>Usuário</p>
-          <p>Queen never CRY</p>
-          <p>Who's this DIVA</p>
-        </div>
-
-        <div class="sidebar" :class="{ open: isSidebarOpen }">
-          <ul>
-            <li class="iconE">
-              <i class="fa-solid fa-skull"></i>
-              <p class="letter">Usuário</p>
-            </li>
-            <li class="iconE">
-              <i class="fa-solid fa-bell"></i>
-              <p class="letter">Notificações</p>
-            </li>
-            <li class="iconE">
-              <i class="fa-solid fa-folder"></i>
-              <p class="letter">Relatório</p>
-            </li>
-            <li class="iconE">
-              <i class="fa-solid fa-list" style="color: #ffffff;"></i>
-              <p>Filtros</p>
-            </li>
-          </ul>
-        </div>
+        <!-- Navbar Content -->
       </div>
     </nav>
 
@@ -64,7 +13,10 @@
 
       <div class="container">
         <div class="livro" v-for="(book, index) in books" :key="index">
-          <img :src="book.image" alt="Book">
+          <img :src="book.image" alt="Book" v-if="book.image"> <!-- Verifica se a imagem existe -->
+          <h3>{{ book.title }}</h3>
+          <p>Autor: {{ book.author }}</p>
+          <p>Ano: {{ book.year }}</p>
         </div>
       </div>
     </main>
@@ -74,36 +26,31 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
-      isSidebarOpen: false,
-      isPopupVisible: false,
-      books: [
-        { image: "../../Imagens/coraline.jpeg" },
-        { image: "../../Imagens/pauloFreire.jpeg" },
-        { image: "../../Imagens/GOT.jpg" },
-        { image: "../../Imagens/ASAdLoF.jpg" }
-      ]
+      books: [] // Array para armazenar os livros
     };
   },
+  async mounted() {
+    await this.fetchBooks(); // Chama a função para buscar os livros ao montar o componente
+  },
   methods: {
-    toggleSidebar() {
-      this.isSidebarOpen = !this.isSidebarOpen;
-    },
-    togglePopup() {
-      this.isPopupVisible = !this.isPopupVisible;
+    async fetchBooks() {
+      try {
+        const response = await axios.get('http://localhost:3000/api/books'); // URL da sua API
+        this.books = response.data; // Armazena os livros no estado do componente
+      } catch (error) {
+        console.error('Erro ao buscar livros:', error);
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-body {
-  background-color: #727374;
-  font-family: 'Texturina', serif;
-  margin: 0;
-}
 
 .navbar {
   background-color: #575A5E;
@@ -115,6 +62,7 @@ body {
   padding: 0 20px;
   box-sizing: border-box;
   justify-content: space-between;
+  padding: 30px;
 }
 
 .icon {
@@ -215,25 +163,25 @@ body {
   justify-content: center;
 }
 
-.sidebar {
+/* .sidebar {
   position: fixed;
   top: 0;
   left: -250px;
-  width: 250px;
+  width: 155px;
   height: 100%;
   background-color: #575A5E;
   color: white;
   overflow-y: auto;
   transition: left 0.3s ease, opacity 0.3s ease;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  z-index: 1000;
-}
+  /* flex-direction: column; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* gap: 20px; */
+  /* z-index: 1000; */
+/* } */
 
-.sidebar.open {
+/* .sidebar.open {
   left: 0;
 }
 
@@ -245,7 +193,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 20px;
-}
+} */
 
 .iconE {
   display: flex;
@@ -255,6 +203,7 @@ body {
   font-size: 18px;
   width: 45px;
   height: 45px;
+  margin-left: 16px;
 }
 
 .iconE i {
@@ -266,26 +215,20 @@ body {
   color: white;
 }
 
-.navbar.shift {
-  margin-left: 250px;
+.list {
+  display: flex;
+  flex-direction: row;
+
 }
 
-.popup {
-  display: none;
-  position: relative;
-  top: 100%;
-  left: 86%;
-  transform: translateX(-50%);
-  background-color: #575A5E;
+.link {
   color: white;
-  padding: 20px;
-  width: 250px;
-  border-radius: 5px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
+  text-decoration: none;
+  margin-left: 20px;
 }
 
-.popup p {
-  margin: 10px 0;
+.container {
+  background-color: black;
 }
+
 </style>

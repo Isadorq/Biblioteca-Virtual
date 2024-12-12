@@ -1,13 +1,33 @@
 const express = require('express');
+const multer = require('multer');
 const Book = require('../models/Books');
 const router = express.Router();
 
+// Configuração do multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/'); // Pasta onde os arquivos serão armazenados
+    },
+    filename: (req, file, cb) => {
+        cb(null, Date.now() + '-' + file.originalname); // Renomeia o arquivo para evitar conflitos
+    }
+});
+
+const upload = multer({ storage });
+
 // ** CRIAÇÃO (POST) ** 
-router.post('/', async (req, res) => { 
-    const { title, author, year } = req.body; 
+router.post('/', upload.single('image'), async (req, res) => { 
     try { 
-        const newBook = new Book({ title, author, year }); // Criando uma nova instância do modelo 
+        const { title, author, year, descrition } = req.body; 
+        if (!title || !author || !year || !descrition || !req.file) {
+            return res.status(400).json({ message: 'Por favor, preencha todos os campos' });
+        }
+
+        const imagePath = req.file.path; // Caminho da imagem enviada
+        
+        const newBook = new Book({ title, author, year, descrition, image: imagePath }); // Criando uma nova instância do modelo 
         await newBook.save(); 
+
         res.status(201).json(newBook); 
     } catch (error) { 
         res.status(500).json({ message: 'Erro ao criar livro', error }); 
@@ -26,9 +46,9 @@ router.get('/', async (req, res) => {
 
 // ** ATUALIZAÇÃO (PUT) ** 
 router.put('/:id', async (req, res) => { 
-    const { title, author, year } = req.body; 
+    const { title, author, year, descrition } = req.body; 
     try { 
-        const updatedBook = await Book.findByIdAndUpdate(req.params.id, { title, author, year }, { new: true }); 
+        const updatedBook = await Book.findByIdAndUpdate(req.params.id, { title, author, year, descrition }, { new: true }); 
         if (!updatedBook) {
             return res.status(404).json({ message: 'Livro não encontrado' });
         }
@@ -49,6 +69,6 @@ router.delete('/:id', async (req, res) => {
     } catch (error) { 
         res.status(500).json({ message: 'Erro ao deletar livro', error }); 
     } 
-}); 
+});
 
 module.exports = router;

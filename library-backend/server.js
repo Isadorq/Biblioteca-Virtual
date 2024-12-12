@@ -2,8 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const fs = require('fs');
-const authRoutes = require('./routes/authRoutes')    // Importa as rotas de autenticação (ainda a serem criadas)
-
+const authRoutes = require('./routes/authRoutes')    // Importa as rotas de autenticação 
+require('dotenv').config();     // Carrega variáveis de ambiente do arquivo .env
 
 // Inicialização do app
 const app = express();

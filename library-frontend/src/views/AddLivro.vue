@@ -1,120 +1,102 @@
 <template>
-  <div>
-    <nav>
-      <div :class="['navbar', { shift: isSidebarOpen }]">
-        <ul class="icon">
-          <li>
-            <a href="#" @click.prevent="toggleSidebar">
-              <i class="fa-solid fa-bars" style="color: #ffffff;"></i>
-            </a>
-          </li>
-        </ul>
-        <div class="logo">
+  <nav>
+    <div class="navbar">
+      <ul class="icon">
+        <!-- Menu e ícones -->
+      </ul>
+      <div class="logo">
+        <RouterLink to="PagInicial">
           <img src="/logoTransparent.png" alt="Logo">
-        </div>
-        <div class="search">
-          <input type="text" placeholder="Search ur book ☠️" v-model="searchTerm">
-        </div>
-        <ul class="right-icons">
-          <li>
-            <a href="#" @click.prevent="togglePopup">
-              <i class="fa-solid fa-skull" style="color: #ffffff;"></i>
-            </a>
-          </li>
-          <li>
-            <a href="#notifications">
-              <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
-            </a>
-          </li>
-        </ul>
-        <div v-if="isPopupVisible" class="popup">
-          <p>Usuário</p>
-          <p>Queen never CRY</p>
-          <p>Who's this DIVA</p>
-        </div>
+        </RouterLink>
       </div>
-    </nav>
-
-    <main>
-      <div class="mainContainer">
-        <div class="containerWrapper">
-          <div class="descrition">
-            <div class="box">
-              <div class="title">
-                <h1>Adicionar Livro</h1>
-              </div>
-              <div class="bat">
-                <img src="/morcego.png" alt="">
-              </div>
-            </div>
-            <div class="inpust">
-              <!-- Use o BookForm aqui -->
-              <BookForm 
-                @book-added="onBookAdded"
-                @book-updated="onBookUpdated"
-                :book-form="bookForm"
-                :book-fields="bookFields"
-                @file-upload="handleFileUpload" 
-              />
-            </div>
-          </div>
-        </div>
+      <div class="search">
+        <input type="text" placeholder="Search ur book ☠️">
       </div>
-    </main>
+      <ul class="right-icons">
+        <li>
+          <router-link to="PagUser">
+            <i class="fa-solid fa-skull" style="color: #ffffff;"></i>
+          </router-link>
+        </li>
+        <li>
+          <a href="#notifications">
+            <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
 
-    <footer></footer>
+  <div class="form-container">
+    <h2>Adicionar Livro</h2>
+    <form @submit.prevent="addBook">
+      <label for="title">Título:</label>
+      <input type="text" id="title" v-model="book.title" required />
+
+      <label for="author">Autor:</label>
+      <input type="text" id="author" v-model="book.author" required />
+
+      <label for="year">Ano de Lançamento:</label>
+      <input type="number" id="year" v-model="book.year" required />
+
+      <!-- Campo para upload da imagem -->
+      <label for="image">Imagem:</label>
+      <input type="file" id="image" @change="onFileChange" accept="image/*" required />
+
+      <button type="submit">Adicionar Livro</button>
+    </form>
   </div>
 </template>
 
 <script>
-import BookForm from '../components/BookForm.vue';
+import axios from 'axios';
 
 export default {
-  components: {
-    BookForm,
-  },
   data() {
     return {
-      isSidebarOpen: false,
-      isPopupVisible: false,
-      searchTerm: '',
-      bookFields: ['Título', 'Autor', 'Data de lançamento', 'ISBN'],
-      bookForm: {
-        Título: '',
-        Autor: '',
-        'Data de lançamento': '',
-        ISBN: '',
-      },
-      selectedFile: null,
+      book: {
+        title: '',
+        author: '',
+        year: '',
+        image: null // Para armazenar a imagem selecionada
+      }
     };
   },
   methods: {
-    toggleSidebar() {
-      this.isSidebarOpen = !this.isSidebarOpen;
+    onFileChange(event) {
+      this.book.image = event.target.files[0]; // Armazena o arquivo selecionado
     },
-    togglePopup() {
-      this.isPopupVisible = !this.isPopupVisible;
-    },
-    handleFileUpload(event) {
-      this.selectedFile = event.target.files[0];
-      console.log('Arquivo selecionado:', this.selectedFile);
-    },
-    onBookAdded(book) {
-      // Lógica para quando um livro for adicionado
-      console.log('Livro adicionado:', book);
-      // Aqui você pode fazer algo como limpar o formulário, atualizar a lista de livros, etc.
-    },
-    onBookUpdated(book) {
-      // Lógica para quando um livro for atualizado
-      console.log('Livro atualizado:', book);
-      // Aqui você pode realizar ações como atualizar o livro na lista, etc.
-    },
-  },
+    async addBook() {
+      const formData = new FormData(); // Cria um objeto FormData
+      formData.append('title', this.book.title);
+      formData.append('author', this.book.author);
+      formData.append('year', this.book.year);
+      formData.append('image', this.book.image); // Adiciona a imagem ao FormData
+
+      try {
+        const response = await axios.post('http://localhost:3000/api/books', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data' // Define o tipo de conteúdo como multipart/form-data
+          }
+        });
+
+        console.log('Livro adicionado:', response.data);
+
+        // Limpa o formulário após o envio
+        this.book = { title: '', author: '', year: '', image: null };
+
+        this.$emit('book-added', response.data); // Emite o evento para atualizar a lista de livros
+
+      } catch (error) {
+        console.error('Erro ao adicionar livro:', error);
+      }
+    }
+  }
 };
 </script>
-
-<style scoped>
-body {
+  
+  <style scoped>
+  body {
   background-color: #727374;
   font-family: 'Texturina', serif;
 }
@@ -128,6 +110,8 @@ body {
   align-items: center;
   padding: 0 20px;
   box-sizing: border-box;
+  justify-content: space-between;
+  padding: 30px;
 }
 
 .icon {
@@ -160,84 +144,38 @@ body {
 .right-icons li {
   margin-left: 20px;
 }
-
-.box {
-  background-color: white;
-  border-radius: 5px;
-  font-size: larger;
-  width: 370px;
-  height: 70px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px auto;
-}
-
-.mainContainer {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  margin-top: 30px;
-  gap: 90px;
-}
-
-.containerWrapper {
-  display: flex;
-  align-items: flex-start;
-}
-
-.descrition {
-  background-color: white;
-  border-radius: 5px;
-  width: 680px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-}
-
-.inpust {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  margin-top: 20px;
-}
-
-.campo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: -250px;
-  width: 250px;
-  height: 100%;
-  background-color: #575A5E;
-  color: white;
-  transition: left 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.sidebar.open {
-  left: 0;
-}
-
-.popup {
-  display: none;
-  position: absolute;
-  background-color: #575A5E;
-  color: white;
-  padding: 20px;
-  border-radius: 5px;
-}
-
-.popup {
-  display: block;
-}
-</style>
+  .form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 500px;
+    margin: 20px auto;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  input {
+    margin-bottom: 10px;
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  </style>
+  
