@@ -1,6 +1,6 @@
 <template>
     <div class="book-list-container">
-        <!-- Lista de livros -->
+        
          <ul class="book-list">
             <li v-for="book in books" :key="book._id" class="book-item">    <!-- Itera sob-->
                 <span>{{ book.title }} - {{ book.author }} ({{ book.year }})</span>
@@ -12,36 +12,36 @@
 </template>
 
 <script>
-import api from '../services/api';  // Importa o serviço API (Axios)
+import api from '../services/api';  
 
 export default {
     data() {
-        return { books: [] };   // Estado local da lista de livros
+        return { books: [] };   
     },
     methods: {
-        fetchBooks() {  // Busca os livros do back-end
+        fetchBooks() {  
             api.getBooks().then(response => {
-                this.books = response.data; // Atualiza a lista de livros
+                this.books = response.data;
             });
         },
-        deleteBook(id) {    // Exclui um livro pelo ID
+        deleteBook(id) {    
             api.deleteBook(id).then(() => {
-                this.fetchBooks();  // Atualiza a lista após a exclusão
+                this.fetchBooks();  
             });
         },
-        editBook(book) {    // Emite um evento para editar um livro
-            this.$emit('edit-book', book);  // Emite o evento 'edit-book'
+        editBook(book) {    
+            this.$emit('edit-book', book);  
         },
     },
     mounted() {
-        this.fetchBooks();  // Busca os livros ao montar o componente
+        this.fetchBooks();  
     },
 };
 </script>
 
 <style scoped>
 
-/* Container principal do componente*/
+
 .book-list container {
     max-width: 600px;
     margin: 0 auto;
@@ -51,14 +51,14 @@ export default {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Estilo da lista de livros */
+
 .book-list {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-/* Cada item da lista */
+
 .book-item {
     display: flex;
     justify-content: space-between;
@@ -69,7 +69,7 @@ export default {
     border-radius: 5px;
 } 
 
-/*  Botão de editar*/
+
 .edit-button{
     background-color: #4CAF50;
     color: white;
@@ -79,7 +79,7 @@ export default {
     border-radius: 3px;
 }
 
-/*  Botão de excluir */
+
 .delete-button {
     background-color: #f44336;
     color: white;
@@ -89,7 +89,7 @@ export default {
     border-radius: 3px;
 }
 
-/*  Efeito hover nos botões */
+
 .edit-button:hover {
     opacity: 0.8;
 }

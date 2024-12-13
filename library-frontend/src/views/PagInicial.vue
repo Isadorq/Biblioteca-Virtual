@@ -1,51 +1,6 @@
 <template>
+  <NavBar />
   <div>
-    <nav>
-      <div class="navbar">
-        <ul class="icon" style="list-style-type: none;">
-          <li>
-            <!-- Ícone de menu removido ou pode ser adicionado aqui -->
-          </li>
-        </ul>
-        
-        <!-- Logo -->
-        <div class="logo">
-          <router-link to="/PagInicial">
-            <img src="/logoTransparent.png" alt="Logo" />
-          </router-link>
-        </div>
-
-        <!-- Links adicionais ao lado da logo -->
-        <div class="nav-links">
-          <router-link to="/MaisLivros" class="nav-link">Mais Livros</router-link>
-          <router-link to="/ListaLogin" class="nav-link">Lista Login</router-link>
-        </div>
-
-        <!-- Barra de pesquisa -->
-        <div class="search">
-          <input
-            type="text"
-            placeholder="Pesquise o livro ou ID"
-            v-model="searchQuery"
-            @input="filterBooks"
-          />
-        </div>
-
-        <ul class="right-icons" style="list-style-type: none;">
-          <li>
-            <a href="#user">
-              <i class="fa-solid fa-skull" style="color: #ffffff;"></i>
-            </a>
-          </li>
-          <li>
-            <a href="#notifications">
-              <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
     <main>
       <div class="banner">
         <img src="/banner 1.png" alt="Banner">
@@ -63,15 +18,18 @@
         </div>
       </div>
     </main>
-
-    <footer></footer>
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
+import NavBar from '../components/NavBar.vue';
 
 export default {
+  components: {
+    NavBar
+  },
   data() {
     return {
       books: [],
@@ -82,12 +40,18 @@ export default {
   async mounted() {
     await this.fetchBooks();
   },
+  watch: {
+    // Quando o searchQuery mudar, o filtro será chamado
+    searchQuery() {
+      this.filterBooks();
+    }
+  },
   methods: {
     async fetchBooks() {
       try {
         const response = await axios.get('http://localhost:3000/api/books');
         this.books = response.data;
-        this.filteredBooks = this.books;
+        this.filteredBooks = this.books; // Inicializa filteredBooks com todos os livros
       } catch (error) {
         console.error('Erro ao buscar livros:', error);
       }
@@ -105,8 +69,10 @@ export default {
 };
 </script>
 
+
 <style scoped>
-.navbar {
+/* Navbar */
+/* .navbar {
   background-color: #575A5E;
   border-radius: 5px;
   height: 70px;
@@ -116,7 +82,7 @@ export default {
   padding: 0 20px;
   box-sizing: border-box;
   justify-content: space-between;
-}
+} */
 
 .logo {
   display: flex;
@@ -146,6 +112,7 @@ export default {
   text-decoration: underline;
 }
 
+/* Barra de pesquisa */
 .search {
   display: flex;
   justify-content: center;
@@ -156,11 +123,29 @@ export default {
 }
 
 .search input {
-  width: 134px;
-  height: 15px;
+  width: 200px; /* Ajuste a largura do campo de pesquisa */
+  height: 35px;
   padding: 8px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .search input {
+    width: 150px; /* Reduz a largura do campo de pesquisa em telas menores */
+  }
+
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-links {
+    margin-left: 0;
+    margin-top: 10px;
+  }
 }
 
 .right-icons {
@@ -184,8 +169,9 @@ export default {
   font-size: 24px;
 }
 
+/* Banner */
 .banner img {
-  width: 815px;
+  width: 100%;
   height: 350px;
   border-radius: 5px;
 }
@@ -197,6 +183,7 @@ export default {
   border-radius: 5px;
 }
 
+/* Container de livros */
 .container {
   display: flex;
   justify-content: space-between;
@@ -228,5 +215,18 @@ export default {
 .livro a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Responsividade para livros */
+@media (max-width: 768px) {
+  .livro {
+    width: 45%; /* Ajuste para 2 livros por linha em telas menores */
+  }
+}
+
+@media (max-width: 480px) {
+  .livro {
+    width: 100%; /* Um livro por linha em dispositivos móveis */
+  }
 }
 </style>

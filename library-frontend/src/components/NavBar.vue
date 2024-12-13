@@ -2,11 +2,11 @@
     <div>
       <nav>
         <div class="navbar">
-          <ul class="icon" style="list-style-type: none;">
-            <li>
+          <!-- <ul class="icon" style="list-style-type: none;">
+            <li> -->
               <!-- Ícone de menu removido ou pode ser adicionado aqui -->
-            </li>
-          </ul>
+            <!-- </li>
+          </ul> -->
   
           <!-- Logo -->
           <div class="logo">

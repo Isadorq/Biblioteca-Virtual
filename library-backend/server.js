@@ -23,7 +23,7 @@ const bookRoutes = require('./routes/books');
 app.use('/api/books', bookRoutes);
 app.use('/api/auth', authRoutes);
 
-app.use(express.static(path.join(__dirname, 'public')));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 // Definir a porta do servidor
 app.listen(3000, () => {

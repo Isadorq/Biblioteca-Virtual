@@ -6,63 +6,60 @@
     <main>
       <div class="main-container">
         <div class="top-container">
-          <h1>Informações do Usuário</h1>
           <div class="description">
-            <p><strong>Nome:</strong> John Doe</p>
-            <p><strong>Email:</strong> johndoe@example.com</p>
-            <!-- Exibir gráfico aqui -->
+            <h1>Informações do Usuário</h1>
+            <p><strong>Nome:</strong> Maria da Silva</p>
+            <p><strong>Email:</strong> maria.silva@email.com</p>
             <div>
-              <Bar :chart-data="chartData" :options="chartOptions" />
+              <!-- <Bar :chart-data="chartData" :options="chartOptions" /> -->
             </div>
           </div>
         </div>
       </div>
     </main>
-
-    <footer>
-      <!-- Seu rodapé aqui -->
-    </footer>
   </div>
 </template>
 
 <script>
-// Importando as dependências necessárias do Chart.js e vue-chartjs
-import { Bar } from 'vue-chartjs';
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+// // Importando as dependências necessárias do Chart.js e vue-chartjs
+// import { Bar } from 'vue-chartjs';
+// import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js';
+import NavBar from '../components/NavBar.vue';
 
 // Registrando os componentes necessários do Chart.js
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
+// ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 export default {
   name: 'UserPage',
   components: {
-    Bar, // Componente de gráfico de barras
+    // Bar, 
+    NavBar,
   },
-  data() {
-    return {
-      searchQuery: '',
-      chartData: {
-        labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio'], // Labels para o gráfico
-        datasets: [
-          {
-            label: 'Livros Lidos',
-            data: [5, 9, 7, 4, 8], // Dados do gráfico (quantidade de livros lidos por mês)
-            backgroundColor: '#42A5F5', // Cor das barras
-            borderColor: '#1E88E5', // Cor da borda das barras
-            borderWidth: 1,
-          },
-        ],
-      },
-      chartOptions: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    };
-  },
+//   data() {
+//     return {
+//       searchQuery: '',
+//       chartData: {
+//         labels: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio'], // Labels para o gráfico
+//         datasets: [
+//           {
+//             label: 'Livros Lidos',
+//             data: [5, 9, 7, 4, 8], // Dados do gráfico (quantidade de livros lidos por mês)
+//             backgroundColor: '#42A5F5', // Cor das barras
+//             borderColor: '#1E88E5', // Cor da borda das barras
+//             borderWidth: 1,
+//           },
+//         ],
+//       },
+//       chartOptions: {
+//         responsive: true,
+//         scales: {
+//           y: {
+//             beginAtZero: true,
+//           },
+//         },
+//       },
+//     };
+//   },
 };
 </script>
 

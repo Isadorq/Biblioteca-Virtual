@@ -1,44 +1,10 @@
 <template>
   <div>
-    <nav>
-      <div class="navbar">
-        <ul class="icon">
-          <li>
-            <!-- Ícone de menu (opcional) -->
-          </li>
-        </ul>
-        <div class="logo">
-          <router-link to="/PagInicial">
-            <img src="/logoTransparent.png" alt="Logo" />
-          </router-link>
-        </div>
-        <div class="search">
-          <input type="text" placeholder="Search your book ☠️" v-model="searchQuery" />
-        </div>
-        <ul class="right-icons">
-          <li>
-            <a href="#user">
-              <i class="fa-solid fa-skull" style="color: #ffffff;"></i>
-            </a>
-          </li>
-          <li>
-            <a href="#notifications">
-              <i class="fa-solid fa-bell" style="color: #ffffff;"></i>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
     <main>
       <div class="main-container">
         <div class="top-container">
-          <h1 class="box">
-            <h1>Cadastro</h1>
-          </h1>
-
-          <!-- Formulário de Cadastro -->
           <div class="description">
+            <h1>Cadastro</h1>
             <form @submit.prevent="handleRegister">
               <div>
                 <label for="name">Nome</label>
@@ -107,49 +73,6 @@ body {
   padding: 0;
 }
 
-.navbar {
-  background-color: #575a5e;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  padding: 0 20px;
-  box-sizing: border-box;
-}
-
-.icon {
-  list-style: none;
-  display: flex;
-  margin: 0;
-  padding: 0;
-}
-
-.logo {
-  margin-left: 60px;
-}
-
-.logo img {
-  width: 80px;
-  height: 80px;
-}
-
-.search input {
-  width: 200px;
-  height: 35px;
-  padding: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  margin-left: 20px;
-}
-
-.right-icons {
-  list-style: none;
-  display: flex;
-  margin-left: auto;
-}
-
-.right-icons li {
-  margin-left: 20px;
-}
 
 .main-container {
   display: flex;

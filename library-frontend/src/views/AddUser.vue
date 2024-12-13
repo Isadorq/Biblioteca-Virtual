@@ -1,230 +1,128 @@
 <template>
-  <NavBar></NavBar>
-
   <div class="form-container">
-    <h2>Adicionar Livro</h2>
-    <form @submit.prevent="addBook">
-      <label for="title">Título:</label>
-      <input type="text" id="title" v-model="book.title" required />
+    <h1>Cadastro de Usuário</h1>
+    <form ref="formRef" @submit="submitForm">
+      <div class="form-group">
+        <label for="username">Nome de Usuário</label>
+        <input type="text" id="username" name="username" v-model="username" required />
+      </div>
 
-      <label for="author">Autor:</label>
-      <input type="text" id="author" v-model="book.author" required />
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" name="email" v-model="email" required />
+      </div>
 
-      <label for="year">Ano de Lançamento:</label>
-      <input type="number" id="year" v-model.number="book.year" required />
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input type="password" id="password" name="password" v-model="password" required />
+      </div>
 
-      <label for="description">Descrição:</label>
-      <input type="text" id="description" v-model="book.description" required />
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Senha</label>
+        <input type="password" id="confirmPassword" v-model="confirmPassword" required />
+      </div>
 
-      <label for="image">Imagem:</label>
-      <input type="file" id="image" @change="handleImageChange" accept="image/*" required />
-
-      <!-- Opção de Status -->
-      <label for="status">Status:</label>
-      <select id="status" v-model="book.status" required>
-        <option value="available">Disponível</option>
-        <option value="unavailable">Indisponível</option>
-      </select>
-
-      <button type="submit">Adicionar Livro</button>
+      <button type="submit">Cadastrar</button>
     </form>
+
+    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
+    <div v-if="successMessage" class="success-message">{{ successMessage }}</div>
   </div>
 </template>
 
-<script>
+<script setup>
+import { ref } from 'vue';
 import axios from 'axios';
-import NavBar from '@/components/NavBar.vue';
-export default {
-  components: {
-    NavBar,
-  },
-  data() {
-    return {
-      // isSidebarOpen: false,
-      // isPopupVisible: false,
-      formData: {
-        name: '',
-        email: '',
-        permission: '',
-        contact: '',
-        photo: null,
-      },
-      formFields: [
-        { name: 'name', label: 'Nome', type: 'text' },
-        { name: 'email', label: 'E-mail', type: 'email' },
-        { name: 'password', label: 'Senha', type: 'password' },
-      ],
-      users: [], 
-      searchTerm: '', 
-    };
-  },
-  methods: {
-    methods: {
-  // Método para adicionar o livro
-  async addBook() {
-    const formData = new FormData();
-    formData.append('title', this.book.title);
-    formData.append('author', this.book.author);
-    formData.append('year', this.book.year);
-    formData.append('description', this.book.description);
+// import NavBar from '../components/NavBar.vue';
 
-    // Verifica se a imagem foi selecionada
-    if (this.book.image) {
-      formData.append('image', this.book.image);
-    } else {
-      console.error('Nenhuma imagem selecionada.');
-      return; // Retorna se não houver imagem
-    }
 
-    // Adiciona o status do livro ao formData
-    formData.append('status', this.book.status);
+const formRef = ref(null);
+const username = ref('');
+const email = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const errorMessage = ref('');
+const successMessage = ref('');
 
-    // Log dos dados que estão sendo enviados
-    console.log('Dados enviados:', {
-      title: this.book.title,
-      author: this.book.author,
-      year: this.book.year,
-      description: this.book.description,
-      image: this.book.image ? this.book.image.name : 'Nenhuma imagem',
-      status: this.book.status
-    });
+const submitForm = async (event) => {
+  event.preventDefault();
 
-    try {
-      const response = await axios.post('http://localhost:3000/api/books', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-
-      console.log('Livro adicionado:', response.data);
-
-      // Limpa o formulário após o envio
-      this.book = { title: '', author: '', year: null, description: '', image: null, status: 'available' };
-
-      this.$emit('book-added', response.data);
-
-    } catch (error) {
-      console.error('Erro ao adicionar livro:', error.response ? error.response.data : error.message);
-      if (error.response && error.response.data) {
-        console.error('Mensagem de erro do servidor:', error.response.data.message);
-      }
-    }
+  // Verifica se as senhas são iguais
+  if (password.value !== confirmPassword.value) {
+    errorMessage.value = 'As senhas não coincidem';
+    return;
   }
-}
+
+  const userData = {
+    username: username.value,
+    email: email.value,
+    password: password.value
+  };
+
+  try {
+    const response = await axios.post('http://localhost:3000/api/users/register', userData);
+    successMessage.value = response.data.message;
+    errorMessage.value = ''; // Limpa a mensagem de erro caso o cadastro seja bem-sucedido
+  } catch (error) {
+    errorMessage.value = error.response?.data?.message || 'Erro ao cadastrar o usuário';
+    successMessage.value = ''; // Limpa a mensagem de sucesso caso o cadastro falhe
+  }
 };
 </script>
 
 <style scoped>
-body {
-  background-color: #727374;
-  font-family: 'Texturina', serif;
-}
-
-.navbar {
-  background-color: #575A5E;
-  border-radius: 5px;
-  height: 70px;
-  width: 100%;
+.form-container {
   display: flex;
-  align-items: center;
-  padding: 0 20px;
-  box-sizing: border-box;
-  justify-content: space-between;
-  padding: 30px;
+  flex-direction: column;
+  justify-content: center;
+  background: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
-
-
-.logo img {
-  width: 80px;
-  text-decoration: none;
+.form-container h1 {
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 24px;
+  color: #333;
 }
-
-img:hover {
-  text-decoration: underline;
+.form-group {
+  margin-bottom: 15px;
 }
-
-.search input {
-  width: 134px;
-  padding: 8px;
-  border-radius: 5px;
+.form-group label {
+  font-weight: bold;
+  color: #555;
+}
+.form-group input {
+  width: 100%;
+  padding: 10px;
   border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
 }
-
-.right-icons button {
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-/* .sidebar {
-  position: fixed;
-  top: 0;
-  left: -250px;
-  width: 250px;
-  height: 100%;
-  background-color: #575a5e;
-  color: white;
-  transition: left 0.3s ease-in-out;
-} */
-/* 
-.sidebar.open {
-  left: 0;
-} */
-
-.popup {
-  position: absolute;
-  top: 60px;
-  right: 20px;
-  background-color: #575a5e;
-  color: white;
-  padding: 20px;
-  border-radius: 5px;
-  z-index: 1000;
-}
-
-.mainContainer {
-  width: 100%; /* Garante que o container ocupe a largura disponível */
-  max-width: 600px; /* Define um limite máximo para a largura do conteúdo */
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-.description {
-  background-color: white;
-  padding: 20px;
-  border-radius: 5px;
-  width: 100%;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column; /* Alinha os elementos na vertical */
-  justify-content: flex-start; /* Alinha os elementos no topo */
-}
-
-.description h1 {
-  margin-bottom: 20px; /* Espaçamento entre o título e o formulário */
-}
-
-.inputs .campo {
-  margin-bottom: 15px; /* Espaçamento entre os campos de input */
-}
-
 button {
-  margin-top: 20px;
-  background-color: #575a5e;
-  color: white;
-  padding: 10px 20px;
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
   border: none;
-  border-radius: 5px;
+  color: white;
+  font-size: 16px;
+  border-radius: 4px;
   cursor: pointer;
 }
-
-ul {
-  list-style-type: none;
-  padding: 0;
+button:hover {
+  background-color: #218838;
 }
-
-ul li {
-  padding: 10px 0;
-  border-bottom: 1px solid #ddd;
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 15px;
+}
+.success-message {
+  color: green;
+  text-align: center;
+  margin-top: 15px;
 }
 </style>
