@@ -8,4 +8,5 @@
 - npm install -g @vue/cli;
 - npm install dotenv;
 - npm install jsonwebtoken;
-- 
+- npm install multer;
+- npm install axios;
